@@ -75,7 +75,6 @@ def fileoutput():
 def main():
     choice = int
     count = True
-    print(len(numbers))
     print("Hi! Welcome to my strong password generator! This generates passwords randomised using characters, letters and numbers")
     print("Each password is 12 characters long to ensure it is secure.")
     while count == True:
