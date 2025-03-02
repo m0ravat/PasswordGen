@@ -3,7 +3,7 @@ import random
 file = open("test.txt", "w")
 file.write("Passwords Stored in a file: " + "\n")
 file.close()
-
+listUser = []
 lowerc = []
 lowerc = list(string.ascii_lowercase)
 
@@ -54,7 +54,7 @@ def textAppend(password):
 
 def generatePass():
     password = ""
-    for x in range(0,12):
+    for x in range(0,12, 1):
         password = password + addVal()
     print("Your password is: " + password)
     passwords.append(password)
@@ -62,7 +62,7 @@ def generatePass():
 
 def listoutput():
      print("Passwords stored in a list: ")
-     for x in range(0,len(passwords)):
+     for x in range(len(passwords)):
           print(passwords[x])   
      print("")
 
@@ -72,11 +72,51 @@ def fileoutput():
           print(line)
      f.close()
 
-def main():
-    choice = int
+def login():
+    return True
+
+def signup():
+    loop = True
+    while loop:
+        username = str(input("Enter a username: "))
+        for user in listUser:
+            if username == user:
+                print("Username has already been registered")
+                continue
+            else:
+                listUser.append(username)
+                confirmUser = username
+                loop = False
+                break
+    return confirmUser
+
+def accountMenu():
+    username = ""
     count = True
-    print("Hi! Welcome to my strong password generator! This generates passwords randomised using characters, letters and numbers")
-    print("Each password is 12 characters long to ensure it is secure.")
+    while count == True:
+        account = str(input("Do you want to use an account? (y/n)"))
+        if account.lower() == "y":
+            userMenu()
+        elif account.lower() == "n":
+            count = False
+        else: 
+            print("Try again")
+    return username
+
+def userMenu():
+    count = 0
+    while count <1:
+        userType = bool(input("Do you want to login? If so type True"))
+        match (userType):
+            case True:
+                login()
+            case False:
+                signup()
+            case _:
+                print("Invalid option")
+
+def passMenu():
+    count = True
     while count == True:
         try:
             choice=int(input("Type 1 to generate a password, or 2 to quit, 3 to view current passwords generated: "))
@@ -90,8 +130,16 @@ def main():
                 fileoutput()
             else: 
                 print("Please enter a valid option")
-            continue
+                continue
         except ValueError:
             print("Integer Required")
+
+def main():
+    print("Hi! Welcome to my strong password generator! This generates passwords randomised using characters, letters and numbers...")
+    print("Each password is 12 characters long to ensure it is secure.")
+    accountMenu()
+    passMenu()
+
+
 
 main()
