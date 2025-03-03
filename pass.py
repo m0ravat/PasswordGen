@@ -4,6 +4,7 @@ file = open("test.txt", "w")
 file.write("Passwords Stored in a file: " + "\n")
 file.close()
 listUser = []
+listUser.append("ubshx")
 lowerc = []
 lowerc = list(string.ascii_lowercase)
 
@@ -48,17 +49,17 @@ def addVal():
             val = genChar()
     return val
 
-def textAppend(password):
+def textAppend(password, username):
      file = open("test.txt", "a")
-     file.write(password + "\n")
+     file.write(username + ": " + password + "\n")
 
-def generatePass():
+def generatePass(username):
     password = ""
     for x in range(0,12, 1):
         password = password + addVal()
     print("Your password is: " + password)
     passwords.append(password)
-    textAppend(password)
+    textAppend(password, username)
 
 def listoutput():
      print("Passwords stored in a list: ")
@@ -73,30 +74,53 @@ def fileoutput():
      f.close()
 
 def login():
-    return True
+    loop = True
+    condition = True
+    count = 0
+    countLeft = 2
+    while loop:
+        username = str(input("Enter a username: "))
+        for user in listUser:
+            if username == user:
+                condition = False
+        if condition == False:
+            confirmUser = username
+            break
+        elif condition == True and count==3:
+            print("Signing up...")
+            confirmUser = signup()
+            loop = False
+        else: 
+            print(f"Username is invalid, {countLeft} more tries")
+            countLeft-=1
+            count+=1
+        
+    return confirmUser
 
 def signup():
     loop = True
+    condition = True
     while loop:
         username = str(input("Enter a username: "))
         for user in listUser:
             if username == user:
                 print("Username has already been registered")
-                continue
-            else:
-                listUser.append(username)
-                confirmUser = username
-                loop = False
-                break
+                condition = False
+        if condition == False:
+            continue
+        else: 
+            confirmUser = username
+            loop = False 
     return confirmUser
 
 def accountMenu():
-    username = ""
+    username = "Default user"
     count = True
     while count == True:
         account = str(input("Do you want to use an account? (y/n)"))
         if account.lower() == "y":
-            userMenu()
+            username = userMenu()
+            count = False
         elif account.lower() == "n":
             count = False
         else: 
@@ -104,24 +128,30 @@ def accountMenu():
     return username
 
 def userMenu():
+    username = ""
     count = 0
     while count <1:
-        userType = bool(input("Do you want to login? If so type True"))
+        userType = str(input("Do you want to login? If so type True, or False for signup: "))
         match (userType):
-            case True:
-                login()
-            case False:
-                signup()
+            case "True":
+                print("Logging in...")
+                username = login()
+                count+=1
+            case "False":
+                print("Signing up...")
+                username = signup()
+                count+=1
             case _:
-                print("Invalid option")
+                print("Invalid")
+    return username
 
-def passMenu():
+def passMenu(username):
     count = True
     while count == True:
         try:
             choice=int(input("Type 1 to generate a password, or 2 to quit, 3 to view current passwords generated: "))
             if choice == 1:
-                generatePass()
+                generatePass(username)
             elif choice == 2:
                 print("Goodbye")
                 break
@@ -137,8 +167,8 @@ def passMenu():
 def main():
     print("Hi! Welcome to my strong password generator! This generates passwords randomised using characters, letters and numbers...")
     print("Each password is 12 characters long to ensure it is secure.")
-    accountMenu()
-    passMenu()
+    username = accountMenu()
+    passMenu(username)
 
 
 
